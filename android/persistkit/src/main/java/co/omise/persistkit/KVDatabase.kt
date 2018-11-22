@@ -1,4 +1,4 @@
-package co.omise.persister
+package co.omise.persistkit
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

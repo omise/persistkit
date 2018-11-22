@@ -7,17 +7,14 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
+import co.omise.persistkit.Storage
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
     private val storage: Storage by lazy {
-        Storage(
-            Room.databaseBuilder(applicationContext, KVDatabase::class.java, "mydb")
-                .build()
-        )
+        Storage(applicationContext)
     }
 
     private val adapter = TodoListAdapter(object : OnItemSelectListener {

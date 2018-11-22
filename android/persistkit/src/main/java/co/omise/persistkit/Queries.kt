@@ -1,4 +1,4 @@
-package co.omise.persister
+package co.omise.persistkit
 
 import androidx.room.Dao
 import androidx.room.Insert

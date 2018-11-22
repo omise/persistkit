@@ -1,10 +1,7 @@
 package co.omise.persister
 
+import co.omise.persistkit.Identifiable
 import java.io.Serializable
-
-interface Identifiable {
-    val identifier: String
-}
 
 data class TodoItem(
     override val identifier: String,
