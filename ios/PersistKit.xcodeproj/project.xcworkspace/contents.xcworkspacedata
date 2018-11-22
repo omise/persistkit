@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Persister.xcodeproj">
+      location = "self:/Users/chakrit/Documents/omise/persistkit/ios/PersistKit.xcodeproj">
    </FileRef>
 </Workspace>

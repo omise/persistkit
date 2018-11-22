@@ -52,7 +52,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2253922521A056DA00091822 /* Persister.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Persister.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2253922521A056DA00091822 /* TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2253922821A056DA00091822 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2253922A21A056DA00091822 /* ListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListController.swift; sourceTree = "<group>"; };
 		2253922D21A056DA00091822 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -98,35 +98,35 @@
 			isa = PBXGroup;
 			children = (
 				2253924E21A2E90E00091822 /* Frameworks */,
-				2253922721A056DA00091822 /* Persister */,
 				2253925821A2ED9A00091822 /* PersistKit */,
 				2253922621A056DA00091822 /* Products */,
+				2253922721A056DA00091822 /* TestApp */,
 			);
 			sourceTree = "<group>";
 		};
 		2253922621A056DA00091822 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2253922521A056DA00091822 /* Persister.app */,
+				2253922521A056DA00091822 /* TestApp.app */,
 				2253925721A2ED9A00091822 /* PersistKit.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		2253922721A056DA00091822 /* Persister */ = {
+		2253922721A056DA00091822 /* TestApp */ = {
 			isa = PBXGroup;
 			children = (
 				2253923421A056DC00091822 /* Info.plist */,
 				2253922821A056DA00091822 /* AppDelegate.swift */,
 				2253922A21A056DA00091822 /* ListController.swift */,
+				22F5CDB421A30878006476F1 /* ListViewModel.swift */,
 				22F5CDB221A30622006476F1 /* NavigationController.swift */,
 				22F5CDB021A304EC006476F1 /* TodoItem.swift */,
-				22F5CDB421A30878006476F1 /* ListViewModel.swift */,
 				2253922F21A056DC00091822 /* Assets.xcassets */,
 				2253923121A056DC00091822 /* LaunchScreen.storyboard */,
 				2253922C21A056DA00091822 /* Main.storyboard */,
 			);
-			path = Persister;
+			path = TestApp;
 			sourceTree = "<group>";
 		};
 		2253924E21A2E90E00091822 /* Frameworks */ = {
@@ -166,9 +166,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		2253922421A056DA00091822 /* Persister */ = {
+		2253922421A056DA00091822 /* TestApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2253923721A056DC00091822 /* Build configuration list for PBXNativeTarget "Persister" */;
+			buildConfigurationList = 2253923721A056DC00091822 /* Build configuration list for PBXNativeTarget "TestApp" */;
 			buildPhases = (
 				2253922121A056DA00091822 /* Sources */,
 				2253922221A056DA00091822 /* Frameworks */,
@@ -180,9 +180,9 @@
 			dependencies = (
 				2253925D21A2ED9A00091822 /* PBXTargetDependency */,
 			);
-			name = Persister;
+			name = TestApp;
 			productName = Persister;
-			productReference = 2253922521A056DA00091822 /* Persister.app */;
+			productReference = 2253922521A056DA00091822 /* TestApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2253925621A2ED9A00091822 /* PersistKit */ = {
@@ -221,7 +221,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 2253922021A056DA00091822 /* Build configuration list for PBXProject "Persister" */;
+			buildConfigurationList = 2253922021A056DA00091822 /* Build configuration list for PBXProject "PersistKit" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -234,7 +234,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2253922421A056DA00091822 /* Persister */,
+				2253922421A056DA00091822 /* TestApp */,
 				2253925621A2ED9A00091822 /* PersistKit */,
 			);
 		};
@@ -525,7 +525,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2253922021A056DA00091822 /* Build configuration list for PBXProject "Persister" */ = {
+		2253922021A056DA00091822 /* Build configuration list for PBXProject "PersistKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2253923521A056DC00091822 /* Debug */,
@@ -534,7 +534,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2253923721A056DC00091822 /* Build configuration list for PBXNativeTarget "Persister" */ = {
+		2253923721A056DC00091822 /* Build configuration list for PBXNativeTarget "TestApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2253923821A056DC00091822 /* Debug */,
