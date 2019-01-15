@@ -7,12 +7,12 @@ class ListViewModel {
     private(set) var todoItems: [TodoItem] = []
 
     init() {
-        todoItems = db.loadAll()
+        todoItems = try! db.loadAll()
     }
 
     func add(item: TodoItem) {
         db.save(item)
-        todoItems = db.loadAll()
+        todoItems = try! db.loadAll()
     }
     
     func toggle(item: TodoItem) -> TodoItem {
@@ -22,10 +22,24 @@ class ListViewModel {
         } else {
             newItem = TodoItem(complete: item)
         }
-        
+
         db.save(newItem)
-        todoItems = db.loadAll()
+        newItem = reload(item: newItem)
+
         return newItem
+    }
+
+    func reload(item: TodoItem) -> TodoItem {
+        guard let index = todoItems.firstIndex(where: { (todoItem) -> Bool in return todoItem.identifier == item.identifier }) else {
+            fatalError("failed to find item in existing todoItems")
+        }
+
+        guard let reloadedItem: TodoItem = try! db.load(item.identifier) else {
+            fatalError("failed to find item \"\(item.identifier)\" in database")
+        }
+
+        todoItems[index] = reloadedItem
+        return reloadedItem
     }
 
     private static func loadDatabase() -> Database {

@@ -20,14 +20,28 @@ public final class Database {
         }
     }
 
-    public func loadAll<T: Recordable>() -> [T] {
+    public func loadAll<T: Recordable>() throws -> [T] {
         switch driver.execute(SelectAllStatement(), mode: .extractRows) {
         case .completed:
             return []
         case .completedWithRecords(let records):
-            return records.map { (rec) -> T in try! T.decode(from: rec) }
+            return try records.map { (rec) -> T in try T.decode(from: rec) }
         case .failed(let message):
             fatalError("failed to load objects from database: \(message)")
+        }
+    }
+
+    public func load<T: Recordable>(_ identifier: String) throws -> T? {
+        switch driver.execute(SelectIdentifierStatement(identifier), mode: .extractRows) {
+        case .completed:
+            return nil
+        case .completedWithRecords(let records):
+            guard let record = records.first else {
+                return nil
+            }
+            return try T.decode(from: record)
+        case .failed(let message):
+            fatalError("failed to load object from database: \(message)")
         }
     }
 

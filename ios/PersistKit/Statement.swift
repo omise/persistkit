@@ -61,9 +61,8 @@ struct SelectIdentifierStatement: Statement {
     }
 
     func bindTo(statement: OpaquePointer?) -> Bool {
-        guard let idChars = identifier.cString(using: .utf8) else { return false }
-        guard sqlite3_bind_text(statement, 1, idChars, Int32(idChars.count), nil) == SQLITE_OK else { return false }
-        return true
+        guard let idChars = identifier.data(using: .utf8) else { return false }
+        return idChars.withUnsafeBytes({ (ptr) -> Int32 in sqlite3_bind_text(statement, 1, ptr, Int32(idChars.count), nil) }) == SQLITE_OK
     }
 }
 
