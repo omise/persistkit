@@ -29,6 +29,15 @@ class ListViewModel {
         return newItem
     }
 
+    func remove(at index: Int) -> Bool {
+        guard 0..<todoItems.count ~= index else { return false }
+        let todoItem = todoItems[index]
+
+        guard try! db.delete(todoItem.identifier) else { return false }
+        todoItems.remove(at: index)
+        return true
+    }
+
     func reload(item: TodoItem) -> TodoItem {
         guard let index = todoItems.firstIndex(where: { (todoItem) -> Bool in return todoItem.identifier == item.identifier }) else {
             fatalError("failed to find item in existing todoItems")

@@ -62,6 +62,13 @@ extension ListController: UITableViewDataSource {
         }
         return cell
     }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            guard self.viewModel.remove(at: indexPath.row) else { return }
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
 }
 
 extension ListController: UITableViewDelegate {

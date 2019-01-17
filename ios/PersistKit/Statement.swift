@@ -50,6 +50,22 @@ struct UpsertStatement: Statement {
     }
 }
 
+struct DeleteIdentifierStatement: Statement {
+    let sql: String = """
+        DELETE FROM records WHERE identifier = ?;
+    """
+
+    let identifier: String
+    init (_ identifier: String) {
+        self.identifier = identifier
+    }
+
+    func bindTo(statement: OpaquePointer?) -> Bool {
+        guard let idChars = identifier.data(using: .utf8) else { return false }
+        return idChars.withUnsafeBytes({ (ptr) -> Int32 in sqlite3_bind_text(statement, 1, ptr, Int32(idChars.count), nil) }) == SQLITE_OK
+    }
+}
+
 struct SelectIdentifierStatement: Statement {
     let sql: String = """
         SELECT * FROM records WHERE identifier = ?;

@@ -5,12 +5,14 @@ final class Driver {
     public enum Result {
         case completed
         case completedWithRecords(records: [Record])
+        case completedWithCount(count: Int)
         case failed(message: String)
     }
 
     public enum Mode {
         case ignoreResult
         case extractRows
+        case countEffectedRows
     }
 
     let filename: String
@@ -48,27 +50,34 @@ final class Driver {
         }
         print("statement bound: \(name)")
 
-        var records: [Record]? = []
+        var records: [Record] = []
         while true {
             switch sqlite3_step(statement) {
             case SQLITE_DONE:
-                if let records = records {
-                    return .completedWithRecords(records: records)
-                } else {
+                switch mode  {
+                case .countEffectedRows:
+                    let count = countEffectedRows(self.db)
+                    return .completedWithCount(count: count)
+                case .ignoreResult:
                     return .completed
+                case .extractRows:
+                    return .completedWithRecords(records: records)
                 }
             case SQLITE_ROW:
                 switch mode {
-                case .ignoreResult:
+                case .ignoreResult, .countEffectedRows:
                     continue
                 case .extractRows:
-                    records = records ?? []
-                    records?.append(extractRecord(statement))
+                    records.append(extractRecord(statement))
                 }
             default: // not _ROW or _DONE means we have an issue
                 return formatError(statement, def: "Statement execution failure")
             }
         }
+    }
+
+    func countEffectedRows(_ ptr: OpaquePointer?) -> Int {
+        return Int(sqlite3_changes(ptr))
     }
 
     func extractRecord(_ ptr: OpaquePointer?) -> Record {

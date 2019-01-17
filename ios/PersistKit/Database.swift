@@ -17,6 +17,8 @@ public final class Database {
             break
         case .failed(let message):
             fatalError("failed to initialize database: \(message)")
+        default:
+            fatalError("reach unexpected state")
         }
     }
 
@@ -28,13 +30,13 @@ public final class Database {
             return try records.map { (rec) -> T in try T.decode(from: rec) }
         case .failed(let message):
             fatalError("failed to load objects from database: \(message)")
+        default:
+            fatalError("reach unexpected state")
         }
     }
 
     public func load<T: Recordable>(_ identifier: String) throws -> T? {
         switch driver.execute(SelectIdentifierStatement(identifier), mode: .extractRows) {
-        case .completed:
-            return nil
         case .completedWithRecords(let records):
             guard let record = records.first else {
                 return nil
@@ -42,16 +44,32 @@ public final class Database {
             return try T.decode(from: record)
         case .failed(let message):
             fatalError("failed to load object from database: \(message)")
+        default:
+            fatalError("reach unexpected state")
         }
     }
 
     public func save<T: Recordable>(_ obj: T) {
         let stmt = UpsertStatement(try! Record(from: obj))
         switch driver.execute(stmt, mode: .ignoreResult) {
-        case .completed, .completedWithRecords(records: _):
+        case .completed:
             break
         case .failed(let message):
             fatalError("failed to save object to database: \(message)")
+        default:
+            fatalError("reach unexpected state")
+        }
+    }
+
+    public func delete(_ identifier: String) throws -> Bool {
+        let stmt = DeleteIdentifierStatement(identifier)
+        switch driver.execute(stmt, mode: .countEffectedRows) {
+        case .completedWithCount(count: let count) where 0...1 ~= count:
+            return count == 1
+        case .failed(let message):
+            fatalError("failed to delete object from database: \(message)")
+        default:
+            fatalError("reach unexpected state")
         }
     }
 }
