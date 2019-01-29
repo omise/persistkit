@@ -1,12 +1,15 @@
 import Foundation
 import SQLite3
 
+
 protocol Statement {
     var sql: String { get }
+
     func bindTo(statement: OpaquePointer?) -> Bool
 }
 
 struct CreateStatement: Statement {
+
     let sql: String = """
         CREATE TABLE IF NOT EXISTS records (
             identifier TEXT PRIMARY KEY UNIQUE NOT NULL,
@@ -24,6 +27,7 @@ struct CreateStatement: Statement {
 }
 
 struct UpsertStatement: Statement {
+
     let sql: String = """
         INSERT INTO records (identifier, kind, flags, content)
         VALUES (?, ?, ?, ?)
@@ -51,6 +55,7 @@ struct UpsertStatement: Statement {
 }
 
 struct DeleteIdentifierStatement: Statement {
+
     let sql: String = """
         DELETE FROM records WHERE identifier = ?;
     """
@@ -67,6 +72,7 @@ struct DeleteIdentifierStatement: Statement {
 }
 
 struct SelectIdentifierStatement: Statement {
+
     let sql: String = """
         SELECT * FROM records WHERE identifier = ?;
     """
@@ -83,6 +89,7 @@ struct SelectIdentifierStatement: Statement {
 }
 
 struct SelectAllStatement: Statement {
+
     let sql: String = """
         SELECT * FROM records;
     """

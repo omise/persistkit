@@ -11,7 +11,7 @@ class ListViewModel {
     }
 
     func add(item: TodoItem) {
-        db.save(item)
+        try! db.save(item)
         todoItems = try! db.loadAll()
     }
     
@@ -23,7 +23,7 @@ class ListViewModel {
             newItem = TodoItem(complete: item)
         }
 
-        db.save(newItem)
+        try! db.save(newItem)
         newItem = reload(item: newItem)
 
         return newItem
@@ -62,7 +62,6 @@ class ListViewModel {
             fatalError("failed to initialize the database")
         }
 
-        db.ensureInitialized()
         print("initialized database at: \(dbPath)")
         return db
     }

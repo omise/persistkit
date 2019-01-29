@@ -2,18 +2,6 @@ import Foundation
 import SQLite3
 
 final class Driver {
-    public enum Result {
-        case completed
-        case completedWithRecords(records: [Record])
-        case completedWithCount(count: Int)
-        case failed(message: String)
-    }
-
-    public enum Mode {
-        case ignoreResult
-        case extractRows
-        case countEffectedRows
-    }
 
     let filename: String
     let db: OpaquePointer
@@ -25,55 +13,86 @@ final class Driver {
 
         self.filename = filename
         self.db = dbptr
+
+        ensureInitialized()
     }
 
     deinit {
         sqlite3_close(db)
     }
 
-    func execute(_ stmt: Statement, mode: Mode) -> Result {
+    private func ensureInitialized() {
+        try! _ = execute(CreateStatement())
+    }
+
+    func query(_ command: Command) throws -> [Record] {
+        let stmt = try newStatementFrom(command: command)
+        return try query(stmt)
+    }
+
+    func query(_ stmt: Statement) throws -> [Record] {
         let name = String(describing: type(of: stmt))
 
-        var statement: OpaquePointer? = nil
-        guard sqlite3_prepare_v2(self.db, stmt.sql, -1, &statement, nil) == SQLITE_OK else {
-            return formatError(self.db, def: "Statement preparation failure")
-        }
-
-        print("statement prepared: \(name)")
+        let statement = try prepareSqliteStatement(stmt: stmt)
         defer {
             sqlite3_finalize(statement)
             print("statement finalized: \(name)")
         }
 
-        guard stmt.bindTo(statement: statement) else {
-            return formatError(statement, def: "Statement parameter binding failure")
-        }
-        print("statement bound: \(name)")
-
         var records: [Record] = []
         while true {
             switch sqlite3_step(statement) {
             case SQLITE_DONE:
-                switch mode  {
-                case .countEffectedRows:
-                    let count = countEffectedRows(self.db)
-                    return .completedWithCount(count: count)
-                case .ignoreResult:
-                    return .completed
-                case .extractRows:
-                    return .completedWithRecords(records: records)
-                }
+                return records
             case SQLITE_ROW:
-                switch mode {
-                case .ignoreResult, .countEffectedRows:
-                    continue
-                case .extractRows:
-                    records.append(extractRecord(statement))
-                }
+                records.append(extractRecord(statement))
             default: // not _ROW or _DONE means we have an issue
-                return formatError(statement, def: "Statement execution failure")
+                throw formatError(statement, def: "Statement execution failure")
             }
         }
+    }
+
+    func execute(_ command: Command) throws -> Int {
+        let stmt = try newStatementFrom(command: command)
+        return try execute(stmt)
+    }
+
+    func execute(_ stmt: Statement) throws -> Int {
+        let name = String(describing: type(of: stmt))
+
+        let statement = try prepareSqliteStatement(stmt: stmt)
+        defer {
+            sqlite3_finalize(statement)
+            print("statement finalized: \(name)")
+        }
+
+        while true {
+            switch sqlite3_step(statement) {
+            case SQLITE_DONE:
+                return countEffectedRows(self.db)
+            case SQLITE_ROW:
+                continue;
+            default: // not _ROW or _DONE means we have an issue
+                throw formatError(statement, def: "Statement execution failure")
+            }
+        }
+    }
+
+    private func prepareSqliteStatement(stmt: Statement) throws -> OpaquePointer? {
+        let name = String(describing: type(of: stmt))
+
+        var statement: OpaquePointer? = nil
+        guard sqlite3_prepare_v2(self.db, stmt.sql, -1, &statement, nil) == SQLITE_OK else {
+            throw formatError(self.db, def: "Statement preparation failure")
+        }
+
+        print("statement prepared: \(name)")
+
+        guard stmt.bindTo(statement: statement) else {
+            throw formatError(statement, def: "Statement parameter binding failure")
+        }
+        print("statement bound: \(name)")
+        return statement
     }
 
     func countEffectedRows(_ ptr: OpaquePointer?) -> Int {
@@ -104,13 +123,26 @@ final class Driver {
         )
     }
 
-    func formatError(_ ptr: OpaquePointer?, def defaultMessage: String) -> Result {
-        guard let ptr = ptr else { return .failed(message: defaultMessage) }
+    func formatError(_ ptr: OpaquePointer?, def defaultMessage: String) -> DatabaseError {
+        guard let ptr = ptr else { return .driverError(reason: defaultMessage) }
 
         if let errmsgptr = sqlite3_errmsg(ptr) {
-            return .failed(message: String(cString: errmsgptr))
+            return .driverError(reason: String(cString: errmsgptr))
         } else {
-            return .failed(message: defaultMessage)
+            return .driverError(reason: defaultMessage)
+        }
+    }
+
+    func newStatementFrom(command: Command) throws -> Statement {
+        switch command {
+        case .loadAll:
+            return SelectAllStatement()
+        case .load(let identifier):
+            return SelectIdentifierStatement(identifier)
+        case .save(let record):
+            return UpsertStatement(record)
+        case .delete(let identifier):
+            return DeleteIdentifierStatement(identifier)
         }
     }
 }

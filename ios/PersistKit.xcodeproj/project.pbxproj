@@ -25,6 +25,8 @@
 		22F5CDB121A304EC006476F1 /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F5CDB021A304EC006476F1 /* TodoItem.swift */; };
 		22F5CDB321A30622006476F1 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F5CDB221A30622006476F1 /* NavigationController.swift */; };
 		22F5CDB521A30878006476F1 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F5CDB421A30878006476F1 /* ListViewModel.swift */; };
+		44BD809821F6EE46009E2970 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44BD809721F6EE46009E2970 /* Command.swift */; };
+		44BD809A21F7018C009E2970 /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44BD809921F7018C009E2970 /* DatabaseError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +74,8 @@
 		22F5CDB021A304EC006476F1 /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
 		22F5CDB221A30622006476F1 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		22F5CDB421A30878006476F1 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
+		44BD809721F6EE46009E2970 /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
+		44BD809921F7018C009E2970 /* DatabaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +144,7 @@
 		2253925821A2ED9A00091822 /* PersistKit */ = {
 			isa = PBXGroup;
 			children = (
+				44BD809921F7018C009E2970 /* DatabaseError.swift */,
 				2253925921A2ED9A00091822 /* PersistKit.h */,
 				2253925A21A2ED9A00091822 /* Info.plist */,
 				22F5CDAA21A2FF08006476F1 /* Database.swift */,
@@ -148,6 +153,7 @@
 				2253923F21A05C2C00091822 /* Record.swift */,
 				2253924821A05D4A00091822 /* Recordable.swift */,
 				22F5CDAE21A3005B006476F1 /* Statement.swift */,
+				44BD809721F6EE46009E2970 /* Command.swift */,
 			);
 			path = PersistKit;
 			sourceTree = "<group>";
@@ -281,6 +287,8 @@
 				22F5CDAB21A2FF08006476F1 /* Database.swift in Sources */,
 				2253926421A2EDAF00091822 /* Driver.swift in Sources */,
 				2253926821A2EDAF00091822 /* Recordable.swift in Sources */,
+				44BD809821F6EE46009E2970 /* Command.swift in Sources */,
+				44BD809A21F7018C009E2970 /* DatabaseError.swift in Sources */,
 				2253926721A2EDAF00091822 /* Record.swift in Sources */,
 				2253926521A2EDAF00091822 /* Identifiable.swift in Sources */,
 			);
