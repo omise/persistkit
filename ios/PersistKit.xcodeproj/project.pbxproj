@@ -25,6 +25,7 @@
 		22F5CDB121A304EC006476F1 /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F5CDB021A304EC006476F1 /* TodoItem.swift */; };
 		22F5CDB321A30622006476F1 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F5CDB221A30622006476F1 /* NavigationController.swift */; };
 		22F5CDB521A30878006476F1 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F5CDB421A30878006476F1 /* ListViewModel.swift */; };
+		44A60CE52223FAA300B7C283 /* SQLite3Driver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A60CE42223FAA300B7C283 /* SQLite3Driver.swift */; };
 		44BD809821F6EE46009E2970 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44BD809721F6EE46009E2970 /* Command.swift */; };
 		44BD809A21F7018C009E2970 /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44BD809921F7018C009E2970 /* DatabaseError.swift */; };
 /* End PBXBuildFile section */
@@ -74,6 +75,7 @@
 		22F5CDB021A304EC006476F1 /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
 		22F5CDB221A30622006476F1 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		22F5CDB421A30878006476F1 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
+		44A60CE42223FAA300B7C283 /* SQLite3Driver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLite3Driver.swift; sourceTree = "<group>"; };
 		44BD809721F6EE46009E2970 /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
 		44BD809921F7018C009E2970 /* DatabaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -144,6 +146,7 @@
 		2253925821A2ED9A00091822 /* PersistKit */ = {
 			isa = PBXGroup;
 			children = (
+				44A60CE32223FA0200B7C283 /* Driver */,
 				44BD809921F7018C009E2970 /* DatabaseError.swift */,
 				2253925921A2ED9A00091822 /* PersistKit.h */,
 				2253925A21A2ED9A00091822 /* Info.plist */,
@@ -156,6 +159,14 @@
 				44BD809721F6EE46009E2970 /* Command.swift */,
 			);
 			path = PersistKit;
+			sourceTree = "<group>";
+		};
+		44A60CE32223FA0200B7C283 /* Driver */ = {
+			isa = PBXGroup;
+			children = (
+				44A60CE42223FAA300B7C283 /* SQLite3Driver.swift */,
+			);
+			path = Driver;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -285,6 +296,7 @@
 			files = (
 				22F5CDAF21A3005B006476F1 /* Statement.swift in Sources */,
 				22F5CDAB21A2FF08006476F1 /* Database.swift in Sources */,
+				44A60CE52223FAA300B7C283 /* SQLite3Driver.swift in Sources */,
 				2253926421A2EDAF00091822 /* Driver.swift in Sources */,
 				2253926821A2EDAF00091822 /* Recordable.swift in Sources */,
 				44BD809821F6EE46009E2970 /* Command.swift in Sources */,

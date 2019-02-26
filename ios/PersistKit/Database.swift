@@ -3,11 +3,7 @@ import Foundation
 public final class Database {
     let driver: Driver
 
-    public init?(filename: String) {
-        guard let driver = Driver(filename: filename) else {
-            return nil
-        }
-
+    public init(driver: Driver) {
         self.driver = driver
     }
 
