@@ -12,13 +12,24 @@ class Storage(val context: Context) : ContextWrapper(context) {
 
     fun <T> loadAll(): List<T> where T : Identifiable, T : Serializable {
         return db.queries()
-            .listAll()
+            .loadAll()
             .map { decode<T>(it) }
             .reversed()
     }
 
+    fun <T> load(identifier: String): T where T : Identifiable, T : Serializable {
+        return db.queries()
+            .load(identifier)
+            .map { decode<T>(it) }
+            .first()
+    }
+
     fun <T> save(obj: T) where T : Identifiable, T : Serializable {
         db.queries().save(encode(obj))
+    }
+
+    fun delete(identifier: String) {
+        db.queries().delete(identifier)
     }
 
     private fun <T> decode(rec: Record): T where T : Identifiable, T : Serializable {

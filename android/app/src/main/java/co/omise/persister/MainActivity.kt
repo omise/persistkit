@@ -18,11 +18,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val adapter = TodoListAdapter(object : OnItemSelectListener {
+        override fun onDelete(identifier: String) {
+            background.execute {
+                storage.delete(identifier)
+                loadTodoListItems()
+            }
+        }
+
         override fun onSelected(item: TodoItem) {
             background.execute {
                 val selectedItem = item.copy(completed = !item.completed)
                 storage.save(selectedItem)
-                loadTodoListItems()
+                reloadTodoItem(selectedItem)
             }
         }
 
@@ -60,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun handleNewItemTapped(): Boolean {
         showCreateTodoDialog { title ->
             if (title.isEmpty()) return@showCreateTodoDialog
@@ -86,6 +94,15 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton(R.string.create_todo_create_button_title) { _, _ -> okListener.invoke(editText.text.toString()) }
             .setNegativeButton(R.string.create_todo_cancel_button_title, null)
             .show()
+    }
+
+    private fun reloadTodoItem(item: TodoItem) {
+        background.execute {
+            val updatedItem: TodoItem = storage.load(item.identifier)
+            handler.post {
+                adapter.updateItem(updatedItem)
+            }
+        }
     }
 
     private fun loadTodoListItems() {

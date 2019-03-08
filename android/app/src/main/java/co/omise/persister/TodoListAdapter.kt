@@ -15,6 +15,14 @@ class TodoListAdapter(private val itemSelectListener: OnItemSelectListener) :
         notifyDataSetChanged()
     }
 
+    fun updateItem(item: TodoItem) {
+        val index = this.todoItems.indexOfFirst { it.identifier == item.identifier }
+        val mutableTodoItems = this.todoItems.toMutableList()
+        mutableTodoItems[index] = item
+        this.todoItems = mutableTodoItems.toList()
+        notifyItemChanged(index)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoListViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.main_item_todo, parent, false)
         val holder = TodoListViewHolder(view)
@@ -23,6 +31,14 @@ class TodoListAdapter(private val itemSelectListener: OnItemSelectListener) :
             if (position != RecyclerView.NO_POSITION) {
                 itemSelectListener.onSelected(todoItems[position])
             }
+        }
+
+        view.setOnLongClickListener {
+            val position = holder.adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                itemSelectListener.onDelete(todoItems[position].identifier)
+            }
+            true
         }
 
         return holder
@@ -44,4 +60,5 @@ class TodoListViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
 interface OnItemSelectListener {
     fun onSelected(item: TodoItem)
+    fun onDelete(identifier: String)
 }
