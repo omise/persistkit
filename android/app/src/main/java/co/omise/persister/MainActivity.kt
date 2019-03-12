@@ -7,20 +7,22 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import co.omise.persistkit.Storage
+import co.omise.persistkit.Database
+import co.omise.persistkit.driver.room.RoomDriver
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
-    private val storage: Storage by lazy {
-        Storage(applicationContext)
+    private val database: Database by lazy {
+        val driver = RoomDriver(applicationContext, "persistkit")
+        Database(driver)
     }
 
     private val adapter = TodoListAdapter(object : OnItemSelectListener {
         override fun onDelete(identifier: String) {
             background.execute {
-                storage.delete(identifier)
+                database.delete(identifier)
                 loadTodoListItems()
             }
         }
@@ -28,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         override fun onSelected(item: TodoItem) {
             background.execute {
                 val selectedItem = item.copy(completed = !item.completed)
-                storage.save(selectedItem)
+                database.save(selectedItem)
                 reloadTodoItem(selectedItem)
             }
         }
@@ -44,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         background.execute {
-            val items: List<TodoItem> = storage.loadAll()
+            val items: List<TodoItem> = database.loadAll()
             handler.post {
                 adapter.setItems(items)
             }
@@ -76,7 +78,7 @@ class MainActivity : AppCompatActivity() {
 
             val item = TodoItem(randomId, title, false)
             background.execute {
-                storage.save(item)
+                database.save(item)
                 loadTodoListItems()
             }
         }
@@ -98,7 +100,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun reloadTodoItem(item: TodoItem) {
         background.execute {
-            val updatedItem: TodoItem = storage.load(item.identifier)
+            val updatedItem: TodoItem = database.load(item.identifier)
             handler.post {
                 adapter.updateItem(updatedItem)
             }
@@ -107,7 +109,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadTodoListItems() {
         background.execute {
-            val newList: List<TodoItem> = storage.loadAll()
+            val newList: List<TodoItem> = database.loadAll()
             handler.post {
                 adapter.setItems(newList)
             }

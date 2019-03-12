@@ -1,35 +1,27 @@
 package co.omise.persistkit
 
-import android.content.Context
-import android.content.ContextWrapper
-import androidx.room.Room
+import co.omise.persistkit.driver.Driver
 import org.apache.commons.lang3.SerializationUtils
 import java.io.Serializable
 
-class Storage(val context: Context) : ContextWrapper(context) {
-    val db: KVDatabase = Room.databaseBuilder(context, KVDatabase::class.java, "persistkit")
-        .build()
-
+class Database(private val driver: Driver) {
     fun <T> loadAll(): List<T> where T : Identifiable, T : Serializable {
-        return db.queries()
-            .loadAll()
+        return driver.query(Command.LoadAll)
             .map { decode<T>(it) }
-            .reversed()
     }
 
     fun <T> load(identifier: String): T where T : Identifiable, T : Serializable {
-        return db.queries()
-            .load(identifier)
+        return driver.query(Command.Load(identifier))
             .map { decode<T>(it) }
             .first()
     }
 
     fun <T> save(obj: T) where T : Identifiable, T : Serializable {
-        db.queries().save(encode(obj))
+        driver.execute(Command.Save(encode(obj)))
     }
 
-    fun delete(identifier: String) {
-        db.queries().delete(identifier)
+    fun delete(identifier: String): Boolean {
+        return driver.execute(Command.Delete(identifier)) == 1
     }
 
     private fun <T> decode(rec: Record): T where T : Identifiable, T : Serializable {
