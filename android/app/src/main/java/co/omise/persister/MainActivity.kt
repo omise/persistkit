@@ -7,6 +7,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import co.omise.persistkit.EncryptedDatabase
 import co.omise.persistkit.Database
 import co.omise.persistkit.driver.room.RoomDriver
 import kotlinx.android.synthetic.main.activity_main.*
@@ -16,7 +17,7 @@ import java.util.concurrent.Executors
 class MainActivity : AppCompatActivity() {
     private val database: Database by lazy {
         val driver = RoomDriver(applicationContext, "persistkit")
-        Database(driver)
+        EncryptedDatabase(driver, "persiskit-test")
     }
 
     private val adapter = TodoListAdapter(object : OnItemSelectListener {
