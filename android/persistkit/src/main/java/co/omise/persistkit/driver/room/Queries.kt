@@ -1,5 +1,6 @@
 package co.omise.persistkit.driver.room
 
+import androidx.annotation.VisibleForTesting
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -22,4 +23,8 @@ interface Queries {
 
     @Query("DELETE FROM records WHERE _id = :identifier")
     fun delete(identifier: String): Int
+
+    @Query("DELETE FROM records")
+    @VisibleForTesting
+    fun deleteAll()
 }

@@ -7,6 +7,7 @@ import co.omise.persistkit.Command;
 import co.omise.persistkit.Record
 import co.omise.persistkit.driver.Driver
 import co.omise.persistkit.driver.exception.UnsupportedCommandException
+import org.jetbrains.annotations.TestOnly
 
 
 class RoomDriver(context: Context, filename: String) : Driver, ContextWrapper(context) {
@@ -31,5 +32,10 @@ class RoomDriver(context: Context, filename: String) : Driver, ContextWrapper(co
                 1
             }
         }
+    }
+
+    @TestOnly
+    fun deleteAll() {
+        db.queries().deleteAll()
     }
 }
