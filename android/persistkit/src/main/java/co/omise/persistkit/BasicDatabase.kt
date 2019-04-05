@@ -10,10 +10,10 @@ open class BasicDatabase(private val driver: Driver) : Database {
             .map { decode<T>(it) }
     }
 
-    override fun <T> load(identifier: String): T where T : Identifiable, T : Serializable {
+    override fun <T> load(identifier: String): T? where T : Identifiable, T : Serializable {
         return driver.query(Command.Load(identifier))
             .map { decode<T>(it) }
-            .first()
+            .firstOrNull()
     }
 
     override fun <T> load(identifiers: List<String>): List<T> where T : Identifiable, T : Serializable {
