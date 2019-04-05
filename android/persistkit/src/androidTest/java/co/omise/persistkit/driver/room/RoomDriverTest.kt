@@ -43,6 +43,18 @@ class RoomDriverTest  {
     }
 
     @Test
+    fun loadWithIDs_shouldReturnMultipleRecordsIfFound() {
+        val records = driver.db.queries().load(listOf("todo-1", "todo-3", "todo-5"))
+        assertEquals(records.size, 3)
+
+        records.forEachIndexed { index, record ->
+            val todoItemIndex = (index * 2) + 1
+            assertEquals("todo-$todoItemIndex", record.identifier)
+            assertEquals("todo-item-$todoItemIndex", String(record.content))
+        }
+    }
+
+    @Test
     fun load_shouldReturnEmptyArrayIfNotExists() {
         val records = driver.db.queries().load("not-existing-todo")
         assertEquals(0, records.size)

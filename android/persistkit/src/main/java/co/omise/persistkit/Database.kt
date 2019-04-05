@@ -9,6 +9,8 @@ interface Database {
 
     fun <T> load(identifier: String): T where T : Identifiable, T : Serializable
 
+    fun <T> load(identifiers: List<String>): List<T> where T : Identifiable, T : Serializable
+
     fun <T> save(obj: T) where T : Identifiable, T : Serializable
 
     fun delete(identifier: String): Boolean
