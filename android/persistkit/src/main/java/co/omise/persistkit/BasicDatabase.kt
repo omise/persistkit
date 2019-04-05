@@ -4,7 +4,7 @@ import co.omise.persistkit.driver.Driver
 import org.apache.commons.lang3.SerializationUtils
 import java.io.Serializable
 
-open class BasicDatabase(private val driver: Driver): Database {
+open class BasicDatabase(private val driver: Driver) : Database {
     override fun <T> loadAll(): List<T> where T : Identifiable, T : Serializable {
         return driver.query(Command.LoadAll)
             .map { decode<T>(it) }
@@ -14,6 +14,11 @@ open class BasicDatabase(private val driver: Driver): Database {
         return driver.query(Command.Load(identifier))
             .map { decode<T>(it) }
             .first()
+    }
+
+    override fun <T> load(identifiers: List<String>): List<T> where T : Identifiable, T : Serializable {
+        return driver.query(Command.LoadWithIDs(identifiers))
+            .map { decode<T>(it) }
     }
 
     override fun <T> save(obj: T) where T : Identifiable, T : Serializable {

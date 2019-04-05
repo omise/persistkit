@@ -18,6 +18,7 @@ class RoomDriver(context: Context, filename: String) : Driver, ContextWrapper(co
         return when (command) {
             is Command.LoadAll -> db.queries().loadAll()
             is Command.Load -> db.queries().load(command.identifier)
+            is Command.LoadWithIDs -> db.queries().load(command.identifiers)
             else -> throw UnsupportedCommandException(command)
         }
     }
@@ -26,6 +27,7 @@ class RoomDriver(context: Context, filename: String) : Driver, ContextWrapper(co
         return when (command) {
             is Command.LoadAll -> db.queries().loadAll().size
             is Command.Load -> db.queries().load(command.identifier).size
+            is Command.LoadWithIDs -> db.queries().load(command.identifiers).size
             is Command.Delete -> db.queries().delete(command.identifier)
             is Command.Save -> {
                 db.queries().save(command.record)
