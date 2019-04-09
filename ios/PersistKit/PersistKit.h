@@ -1,11 +1,3 @@
-//
-//  PersistKit.h
-//  PersistKit
-//
-//  Created by Chakrit Wichian on 11/19/18.
-//  Copyright © 2018 Chakrit Wichian. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 
 //! Project version number for PersistKit.
