@@ -57,6 +57,16 @@ class PersistKitTests: XCTestCase {
     let loadedTodo: Todo? = try database.load("Undefined Todo")
     XCTAssertNil(loadedTodo)
   }
+  
+  func testLoadMultipleData() throws {
+    let loadedTodos: [Todo] = try database.load(identifiers: ["Todo 5", "Todo 3", "Todo 1", ])
+    XCTAssertEqual(loadedTodos.count, 3)
+    
+    zip([5, 3, 1], loadedTodos).forEach({
+      XCTAssertEqual($1.title, "Todo \($0)")
+      XCTAssertEqual($1.detail, "Todo Item number \($0)")
+    })
+  }
 }
 
 

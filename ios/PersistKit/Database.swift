@@ -27,6 +27,17 @@ public final class Database {
     return recordable
   }
   
+  public func load<T: Recordable>(identifiers: [String]) throws -> [T] {
+    let records = try driver.query(Command.loadWithIDs(identifiers))
+    return try records.map({
+      do {
+        return try T.decode(from: $0)
+      } catch _ {
+        throw DatabaseError.cannotConvertToRecordable
+      }
+    })
+  }
+  
   public func save<T: Recordable>(_ obj: T) throws {
     guard let record = try? Record(from: obj) else {
       throw DatabaseError.cannotConvertToRecord

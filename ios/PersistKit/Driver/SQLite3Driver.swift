@@ -35,8 +35,6 @@ public final class SQLite3Driver: Driver {
   }
   
   func query(_ stmt: Statement) throws -> [Record] {
-    let name = String(describing: type(of: stmt))
-    
     let statement = try prepareSqliteStatement(stmt: stmt)
     defer {
       sqlite3_finalize(statement)
@@ -46,7 +44,7 @@ public final class SQLite3Driver: Driver {
     while true {
       switch sqlite3_step(statement) {
       case SQLITE_DONE:
-        return records
+        return stmt.processRecords(records)
       case SQLITE_ROW:
         records.append(extractRecord(statement))
       default: // not _ROW or _DONE means we have an issue
