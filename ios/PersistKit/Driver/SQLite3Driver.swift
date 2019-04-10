@@ -1,7 +1,11 @@
 import Foundation
 import SQLite3
 
+
+
 public final class SQLite3Driver: Driver {
+
+  static let transiantDestructor = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
   
   let filename: String
   let db: OpaquePointer
@@ -56,9 +60,7 @@ public final class SQLite3Driver: Driver {
     return try execute(stmt)
   }
   
-  func execute(_ stmt: Statement) throws -> Int {
-    let name = String(describing: type(of: stmt))
-    
+  func execute(_ stmt: Statement) throws -> Int {    
     let statement = try prepareSqliteStatement(stmt: stmt)
     defer {
       sqlite3_finalize(statement)

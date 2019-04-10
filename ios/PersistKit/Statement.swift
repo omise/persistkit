@@ -27,7 +27,7 @@ struct CreateStatement: Statement {
         );
 
         CREATE INDEX records_identifier_pkey ON records (identifier);
-    """
+        """
     
     func bindTo(statement: OpaquePointer?) -> Bool {
         return true
@@ -43,7 +43,7 @@ struct UpsertStatement: Statement {
             UPDATE SET kind = excluded.kind,
                 flags = excluded.flags,
                 content = excluded.content;
-    """
+        """
     
     let record: Record
     init(_ record: Record) {
@@ -51,13 +51,16 @@ struct UpsertStatement: Statement {
     }
     
     func bindTo(statement: OpaquePointer?) -> Bool {
-        guard let idData = record.identifier.data(using: .utf8) else { return false }
-        guard let kindData = record.identifier.data(using: .utf8) else { return false }
-        
-        guard idData.withUnsafeBytes({ (ptr: UnsafeRawBufferPointer) -> Int32 in sqlite3_bind_text(statement, 1, ptr.bindMemory(to: Int8.self).baseAddress, Int32(idData.count), nil) }) == SQLITE_OK else { return false }
-        guard kindData.withUnsafeBytes({ (ptr) -> Int32 in sqlite3_bind_text(statement, 2, ptr.bindMemory(to: Int8.self).baseAddress, Int32(kindData.count), nil) }) == SQLITE_OK else { return false }
+        guard record.identifier.withCString({ (ptr) -> Int32 in
+            sqlite3_bind_text(statement, 1, ptr, -1, SQLite3Driver.transiantDestructor)
+        }) == SQLITE_OK else { return false }
+        guard record.kind.withCString({ (ptr) -> Int32 in
+            sqlite3_bind_text(statement, 2, ptr, -1, SQLite3Driver.transiantDestructor)
+        }) == SQLITE_OK else { return false }
         guard sqlite3_bind_int(statement, 3, Int32(record.flags)) == SQLITE_OK else { return false }
-        guard record.content.withUnsafeBytes({ (bytes) -> Int32 in sqlite3_bind_blob(statement, 4, bytes.bindMemory(to: Int8.self).baseAddress, Int32(self.record.content.count), nil) }) == SQLITE_OK else { return false }
+        guard record.content.withUnsafeBytes({ (bytes: UnsafeRawBufferPointer) -> Int32 in
+            sqlite3_bind_blob(statement, 4, UnsafeRawPointer(bytes.baseAddress), Int32(self.record.content.count), SQLite3Driver.transiantDestructor)
+        }) == SQLITE_OK else { return false }
         return true
     }
 }
@@ -66,7 +69,7 @@ struct DeleteIdentifierStatement: Statement {
     
     let sql: String = """
         DELETE FROM records WHERE identifier = ?;
-    """
+        """
     
     let identifier: String
     init (_ identifier: String) {
@@ -74,8 +77,9 @@ struct DeleteIdentifierStatement: Statement {
     }
     
     func bindTo(statement: OpaquePointer?) -> Bool {
-        guard let idChars = identifier.data(using: .utf8) else { return false }
-        return idChars.withUnsafeBytes({ (ptr) -> Int32 in sqlite3_bind_text(statement, 1, ptr.bindMemory(to: Int8.self).baseAddress, Int32(idChars.count), nil) }) == SQLITE_OK
+        return identifier.withCString({ (ptr) -> Int32 in
+            sqlite3_bind_text(statement, 1, ptr, -1, SQLite3Driver.transiantDestructor)
+        }) == SQLITE_OK
     }
 }
 
@@ -83,7 +87,7 @@ struct SelectIdentifierStatement: Statement {
     
     let sql: String = """
         SELECT * FROM records WHERE identifier = ?;
-    """
+        """
     
     let identifier: String
     init (_ identifier: String) {
@@ -91,24 +95,31 @@ struct SelectIdentifierStatement: Statement {
     }
     
     func bindTo(statement: OpaquePointer?) -> Bool {
-        guard let idChars = identifier.data(using: .utf8) else { return false }
-        return idChars.withUnsafeBytes({ (ptr) -> Int32 in sqlite3_bind_text(statement, 1, ptr.bindMemory(to: Int8.self).baseAddress, Int32(idChars.count), nil) }) == SQLITE_OK
+        return identifier.withCString({ (ptr) -> Int32 in
+            sqlite3_bind_text(statement, 1, ptr, -1, SQLite3Driver.transiantDestructor)
+        }) == SQLITE_OK
     }
 }
 
 struct SelectIdentifiersStatement: Statement {
-    let sql: String = """
-        SELECT * FROM records WHERE identifier IN (?);
-    """
+    let sql: String
     
     let identifiers: [String]
     init (_ identifiers: [String]) {
+        let inQuery = Array(repeating: "?", count: identifiers.count)
+        self.sql = "SELECT * FROM records WHERE identifier IN (\(inQuery.joined(separator: ",")));"
         self.identifiers = identifiers
     }
     
     func bindTo(statement: OpaquePointer?) -> Bool {
-        guard let idsChars = identifiers.map({ "'\($0)'" }).joined(separator: ",").data(using: .utf8) else { return false }
-        return idsChars.withUnsafeBytes({ (ptr) -> Int32 in sqlite3_bind_text(statement, 1, ptr.bindMemory(to: Int8.self).baseAddress, Int32(idsChars.count), nil) }) == SQLITE_OK
+        for (index, identifier) in identifiers.enumerated() {
+            guard identifier.withCString({ (ptr) -> Int32 in
+                sqlite3_bind_text(statement, Int32(index + 1), ptr, -1, SQLite3Driver.transiantDestructor)
+            }) == SQLITE_OK else {
+                return false
+            }
+        }
+        return true
     }
     
     func processRecords(_ records: [Record]) -> [Record] {
@@ -122,7 +133,7 @@ struct SelectAllStatement: Statement {
     
     let sql: String = """
         SELECT * FROM records;
-    """
+        """
     
     func bindTo(statement: OpaquePointer?) -> Bool {
         return true
