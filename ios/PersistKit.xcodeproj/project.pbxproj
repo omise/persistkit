@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -28,10 +28,19 @@
 		44A60CE52223FAA300B7C283 /* SQLite3Driver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A60CE42223FAA300B7C283 /* SQLite3Driver.swift */; };
 		44BD809821F6EE46009E2970 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44BD809721F6EE46009E2970 /* Command.swift */; };
 		44BD809A21F7018C009E2970 /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44BD809921F7018C009E2970 /* DatabaseError.swift */; };
+		8A4E61F1225C9ADE00C4174A /* PersistKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4E61F0225C9ADE00C4174A /* PersistKitTests.swift */; };
+		8A4E61F3225C9ADE00C4174A /* PersistKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2253925721A2ED9A00091822 /* PersistKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		2253925C21A2ED9A00091822 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2253921D21A056DA00091822 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2253925621A2ED9A00091822;
+			remoteInfo = PersistKit;
+		};
+		8A4E61F4225C9ADE00C4174A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2253921D21A056DA00091822 /* Project object */;
 			proxyType = 1;
@@ -71,13 +80,16 @@
 		2253925921A2ED9A00091822 /* PersistKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PersistKit.h; sourceTree = "<group>"; };
 		2253925A21A2ED9A00091822 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		22F5CDAA21A2FF08006476F1 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
-		22F5CDAE21A3005B006476F1 /* Statement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statement.swift; sourceTree = "<group>"; };
+		22F5CDAE21A3005B006476F1 /* Statement.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = Statement.swift; sourceTree = "<group>"; tabWidth = 4; };
 		22F5CDB021A304EC006476F1 /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
 		22F5CDB221A30622006476F1 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		22F5CDB421A30878006476F1 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
 		44A60CE42223FAA300B7C283 /* SQLite3Driver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLite3Driver.swift; sourceTree = "<group>"; };
 		44BD809721F6EE46009E2970 /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
 		44BD809921F7018C009E2970 /* DatabaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
+		8A4E61EE225C9ADE00C4174A /* PersistKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PersistKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A4E61F0225C9ADE00C4174A /* PersistKitTests.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = PersistKitTests.swift; sourceTree = "<group>"; tabWidth = 2; };
+		8A4E61F2225C9ADE00C4174A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,16 +109,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8A4E61EB225C9ADE00C4174A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A4E61F3225C9ADE00C4174A /* PersistKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		2253921C21A056DA00091822 = {
 			isa = PBXGroup;
 			children = (
-				2253924E21A2E90E00091822 /* Frameworks */,
 				2253925821A2ED9A00091822 /* PersistKit */,
-				2253922621A056DA00091822 /* Products */,
 				2253922721A056DA00091822 /* TestApp */,
+				8A4E61EF225C9ADE00C4174A /* PersistKitTests */,
+				2253924E21A2E90E00091822 /* Frameworks */,
+				2253922621A056DA00091822 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -115,6 +136,7 @@
 			children = (
 				2253922521A056DA00091822 /* TestApp.app */,
 				2253925721A2ED9A00091822 /* PersistKit.framework */,
+				8A4E61EE225C9ADE00C4174A /* PersistKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -169,6 +191,15 @@
 			path = Driver;
 			sourceTree = "<group>";
 		};
+		8A4E61EF225C9ADE00C4174A /* PersistKitTests */ = {
+			isa = PBXGroup;
+			children = (
+				8A4E61F0225C9ADE00C4174A /* PersistKitTests.swift */,
+				8A4E61F2225C9ADE00C4174A /* Info.plist */,
+			);
+			path = PersistKitTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -220,26 +251,49 @@
 			productReference = 2253925721A2ED9A00091822 /* PersistKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		8A4E61ED225C9ADE00C4174A /* PersistKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8A4E61F6225C9ADE00C4174A /* Build configuration list for PBXNativeTarget "PersistKitTests" */;
+			buildPhases = (
+				8A4E61EA225C9ADE00C4174A /* Sources */,
+				8A4E61EB225C9ADE00C4174A /* Frameworks */,
+				8A4E61EC225C9ADE00C4174A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8A4E61F5225C9ADE00C4174A /* PBXTargetDependency */,
+			);
+			name = PersistKitTests;
+			productName = PersistKitTests;
+			productReference = 8A4E61EE225C9ADE00C4174A /* PersistKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		2253921D21A056DA00091822 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1010;
+				LastSwiftUpdateCheck = 1020;
 				LastUpgradeCheck = 1010;
-				ORGANIZATIONNAME = "Chakrit Wichian";
+				ORGANIZATIONNAME = "Omise Co., Ltd.";
 				TargetAttributes = {
 					2253922421A056DA00091822 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1020;
 					};
 					2253925621A2ED9A00091822 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1020;
+					};
+					8A4E61ED225C9ADE00C4174A = {
+						CreatedOnToolsVersion = 10.2;
 					};
 				};
 			};
 			buildConfigurationList = 2253922021A056DA00091822 /* Build configuration list for PBXProject "PersistKit" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -253,6 +307,7 @@
 			targets = (
 				2253922421A056DA00091822 /* TestApp */,
 				2253925621A2ED9A00091822 /* PersistKit */,
+				8A4E61ED225C9ADE00C4174A /* PersistKitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -269,6 +324,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		2253925521A2ED9A00091822 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8A4E61EC225C9ADE00C4174A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -306,6 +368,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8A4E61EA225C9ADE00C4174A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A4E61F1225C9ADE00C4174A /* PersistKitTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -313,6 +383,11 @@
 			isa = PBXTargetDependency;
 			target = 2253925621A2ED9A00091822 /* PersistKit */;
 			targetProxy = 2253925C21A2ED9A00091822 /* PBXContainerItemProxy */;
+		};
+		8A4E61F5225C9ADE00C4174A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2253925621A2ED9A00091822 /* PersistKit */;
+			targetProxy = 8A4E61F4225C9ADE00C4174A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -387,13 +462,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -442,12 +518,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -459,13 +536,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = TestApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.omise.TestApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -477,13 +554,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = TestApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.omise.TestApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -508,7 +585,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = co.omise.PersistKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -535,10 +611,47 @@
 				PRODUCT_BUNDLE_IDENTIFIER = co.omise.PersistKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		8A4E61F7225C9ADE00C4174A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = AWD3VR6J7J;
+				INFOPLIST_FILE = PersistKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = co.omise.PersistKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8A4E61F8225C9ADE00C4174A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = AWD3VR6J7J;
+				INFOPLIST_FILE = PersistKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = co.omise.PersistKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -568,6 +681,15 @@
 			buildConfigurations = (
 				2253926121A2ED9A00091822 /* Debug */,
 				2253926221A2ED9A00091822 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8A4E61F6225C9ADE00C4174A /* Build configuration list for PBXNativeTarget "PersistKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A4E61F7225C9ADE00C4174A /* Debug */,
+				8A4E61F8225C9ADE00C4174A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
