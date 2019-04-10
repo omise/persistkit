@@ -6,5 +6,6 @@ public enum Command {
   case loadWithIDs(_ identifiers: [String])
   case save(_ record: Record)
   case delete(_ identifier: String)
+  case clearDatabase
 }
 

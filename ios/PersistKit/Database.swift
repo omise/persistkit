@@ -52,4 +52,12 @@ public final class Database {
     }
     return count == 1
   }
+  
+  public func clearDatabase() throws {
+    _ = try driver.execute(.clearDatabase)
+  }
+  
+  public func deleteDatabase() throws {
+    try driver.deleteDatabase()
+  }
 }

@@ -21,13 +21,14 @@ class PersistKitTests: XCTestCase {
     }
     
     database = Database(driver: driver)
+    try! database.clearDatabase()
     
     try! todos.forEach(database.save)
   }
   
   override func tearDown() {
+    XCTAssertNoThrow(try database.deleteDatabase())
     database = nil
-    try! FileManager.default.removeItem(at: databaseFileURL)
   }
   
   func testLoadAllData() throws {

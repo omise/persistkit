@@ -139,6 +139,18 @@ public final class SQLite3Driver: Driver {
       return UpsertStatement(record)
     case .delete(let identifier):
       return DeleteIdentifierStatement(identifier)
+    case .clearDatabase:
+      return DeleteAllStatement()
     }
+  }
+  
+  public func deleteDatabase() throws {
+    if #available(iOS 8.2, *) {
+      sqlite3_close_v2(self.db)
+    } else {
+      sqlite3_close(self.db)
+    }
+    
+    try FileManager.default.removeItem(atPath: filename)
   }
 }
