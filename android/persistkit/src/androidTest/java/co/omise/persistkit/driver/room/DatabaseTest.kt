@@ -96,6 +96,19 @@ class DatabaseTest {
         assertEquals("todo-1", updatedTodo.identifier)
         assertEquals(todo.detail, updatedTodo.detail)
     }
+
+    @Test
+    fun deleteDatabase_shouldLeaveNoFile() {
+        val context = InstrumentationRegistry.getContext()
+        val filename = "room-driver-test.sqlite3"
+        val databaseFilePath = context.getDatabasePath(filename)
+        assertTrue(databaseFilePath.exists())
+        assertTrue(database.deleteDatabase())
+        assertFalse(databaseFilePath.exists())
+        // Restore the database state
+        val driver = RoomDriver(context, filename)
+        database = BasicDatabase(driver)
+    }
 }
 
 

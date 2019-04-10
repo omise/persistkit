@@ -74,10 +74,10 @@ class PersistKitTests: XCTestCase {
     XCTAssertNoThrow(try database.deleteDatabase())
     XCTAssertFalse(FileManager.default.fileExists(atPath: databaseFileURL.path))
     
+    // Restore the database state
     guard let driver = SQLite3Driver(databaseFileURL: databaseFileURL) else {
       fatalError("failed to initialize SQLite3Driver for Database")
     }
-    
     database = Database(driver: driver)
   }
 }
