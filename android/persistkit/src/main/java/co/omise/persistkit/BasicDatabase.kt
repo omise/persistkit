@@ -19,6 +19,7 @@ open class BasicDatabase(private val driver: Driver) : Database {
     override fun <T> load(identifiers: List<String>): List<T> where T : Identifiable, T : Serializable {
         return driver.query(Command.LoadWithIDs(identifiers))
             .map { decode<T>(it) }
+            .sortedBy { identifiers.indexOf(it.identifier) }
     }
 
     override fun <T> save(obj: T) where T : Identifiable, T : Serializable {
@@ -36,5 +37,9 @@ open class BasicDatabase(private val driver: Driver) : Database {
     protected open fun <T> encode(obj: T): Record where T : Identifiable, T : Serializable {
         val content = SerializationUtils.serialize(obj)
         return Record(obj.identifier, obj::class.java.simpleName, 0, content)
+    }
+
+    override fun deleteDatabase(): Boolean {
+        return driver.deleteDatabase()
     }
 }

@@ -4,6 +4,7 @@ import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
 import co.omise.persistkit.Command
 import co.omise.persistkit.Record
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -19,11 +20,15 @@ class RoomDriverTest  {
     fun setUp() {
         val context = InstrumentationRegistry.getContext();
         driver = RoomDriver(context, "room-driver-test.sqlite3")
-        driver.deleteAll()
 
         for (record in records) {
             driver.execute(Command.Save(record))
         }
+    }
+
+    @After
+    fun tearDown() {
+        driver.deleteDatabase()
     }
 
     @Test
@@ -44,7 +49,7 @@ class RoomDriverTest  {
 
     @Test
     fun loadWithIDs_shouldReturnMultipleRecordsIfFound() {
-        val records = driver.db.queries().load(listOf("todo-1", "todo-3", "todo-5"))
+        val records = driver.db.queries().load(listOf("todo-3", "todo-1", "todo-5"))
         assertEquals(records.size, 3)
 
         records.forEachIndexed { index, record ->

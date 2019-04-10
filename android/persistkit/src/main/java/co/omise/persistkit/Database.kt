@@ -1,7 +1,5 @@
 package co.omise.persistkit
 
-import co.omise.persistkit.driver.Driver
-import org.apache.commons.lang3.SerializationUtils
 import java.io.Serializable
 
 interface Database {
@@ -14,4 +12,6 @@ interface Database {
     fun <T> save(obj: T) where T : Identifiable, T : Serializable
 
     fun delete(identifier: String): Boolean
+
+    fun deleteDatabase(): Boolean
 }
