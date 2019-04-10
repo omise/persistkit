@@ -16,7 +16,7 @@ class PersistKitTests: XCTestCase {
   }()
   
   override func setUp() {
-    guard let driver = SQLite3Driver(filename: databaseFileURL.path) else {
+    guard let driver = SQLite3Driver(databaseFileURL: databaseFileURL) else {
       fatalError("failed to initialize SQLite3Driver for Database")
     }
     
@@ -67,6 +67,18 @@ class PersistKitTests: XCTestCase {
       XCTAssertEqual($1.title, "Todo \($0)")
       XCTAssertEqual($1.detail, "Todo Item number \($0)")
     })
+  }
+  
+  func testDeleteDatabase() throws {
+    XCTAssertTrue(FileManager.default.fileExists(atPath: databaseFileURL.path))
+    XCTAssertNoThrow(try database.deleteDatabase())
+    XCTAssertFalse(FileManager.default.fileExists(atPath: databaseFileURL.path))
+    
+    guard let driver = SQLite3Driver(databaseFileURL: databaseFileURL) else {
+      fatalError("failed to initialize SQLite3Driver for Database")
+    }
+    
+    database = Database(driver: driver)
   }
 }
 

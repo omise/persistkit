@@ -7,15 +7,16 @@ public final class SQLite3Driver: Driver {
 
   static let transiantDestructor = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
   
-  let filename: String
+  let fileURL: URL
   let db: OpaquePointer
   
-  public init?(filename: String) {
+  public init?(databaseFileURL: URL) {
     var dbout: OpaquePointer? = nil
-    guard sqlite3_open(filename, &dbout) == SQLITE_OK else { return nil }
+    guard databaseFileURL.isFileURL &&
+      sqlite3_open(databaseFileURL.absoluteString, &dbout) == SQLITE_OK else { return nil }
     guard let dbptr = dbout else { return nil }
     
-    self.filename = filename
+    self.fileURL = databaseFileURL
     self.db = dbptr
     
     ensureInitialized()
@@ -151,6 +152,6 @@ public final class SQLite3Driver: Driver {
       sqlite3_close(self.db)
     }
     
-    try FileManager.default.removeItem(atPath: filename)
+    try FileManager.default.removeItem(at: fileURL)
   }
 }
