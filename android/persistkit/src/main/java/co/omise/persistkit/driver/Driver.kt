@@ -11,5 +11,7 @@ interface Driver {
     @Throws(UnsupportedCommandException::class)
     fun execute(command: Command): Int
 
-    fun deleteDatabase() : Boolean
+    fun clearDatabase()
+
+    fun deleteDatabase(): Boolean
 }

@@ -13,7 +13,7 @@ import java.io.Serializable
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)
-class DatabaseTest  {
+class DatabaseTest {
     private lateinit var database: BasicDatabase
     private val todos: List<Todo> by lazy { (1..20).map { Todo("todo-$it", "todo-item-$it", this.date) } }
     private val date = Date()
@@ -23,6 +23,7 @@ class DatabaseTest  {
         val context = InstrumentationRegistry.getContext()
         val driver = RoomDriver(context, "room-driver-test.sqlite3")
         database = BasicDatabase(driver)
+        database.clearDatabase()
 
         for (todo in todos) {
             database.save(todo)

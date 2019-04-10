@@ -12,14 +12,24 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class RoomDriverTest  {
+class RoomDriverTest {
     private lateinit var driver: RoomDriver
-    private val records: List<Record> by lazy { (1..20).map { Record("todo-$it", "kind", 0, "todo-item-$it".toByteArray()) } }
+    private val records: List<Record> by lazy {
+        (1..20).map {
+            Record(
+                "todo-$it",
+                "kind",
+                0,
+                "todo-item-$it".toByteArray()
+            )
+        }
+    }
 
     @Before
     fun setUp() {
         val context = InstrumentationRegistry.getContext();
         driver = RoomDriver(context, "room-driver-test.sqlite3")
+        driver.clearDatabase()
 
         for (record in records) {
             driver.execute(Command.Save(record))

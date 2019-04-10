@@ -1,6 +1,5 @@
 package co.omise.persistkit.driver.room
 
-import androidx.annotation.VisibleForTesting
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy

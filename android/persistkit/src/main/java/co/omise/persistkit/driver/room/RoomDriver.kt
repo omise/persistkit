@@ -39,8 +39,15 @@ class RoomDriver(private val context: Context, private val filename: String) : D
         }
     }
 
-    override fun deleteDatabase(): Boolean {
+    override fun clearDatabase() {
         db.queries().deleteAll()
+    }
+
+    override fun deleteDatabase(): Boolean {
+        clearDatabase()
+        if (db.isOpen) {
+            db.close()
+        }
         return file.delete()
     }
 

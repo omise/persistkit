@@ -42,4 +42,8 @@ open class BasicDatabase(private val driver: Driver) : Database {
     override fun deleteDatabase(): Boolean {
         return driver.deleteDatabase()
     }
+
+    override fun clearDatabase() {
+        driver.clearDatabase()
+    }
 }

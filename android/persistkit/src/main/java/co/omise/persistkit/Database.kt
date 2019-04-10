@@ -14,4 +14,6 @@ interface Database {
     fun delete(identifier: String): Boolean
 
     fun deleteDatabase(): Boolean
+
+    fun clearDatabase()
 }
