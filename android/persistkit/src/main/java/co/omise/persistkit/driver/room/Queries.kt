@@ -1,6 +1,5 @@
 package co.omise.persistkit.driver.room
 
-import androidx.annotation.VisibleForTesting
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -16,7 +15,7 @@ interface Queries {
     @Query("SELECT * FROM records WHERE _id = :identifier;")
     fun load(identifier: String): List<Record>
 
-    @Query("SELECT * FROM records WHERE _id IN(:identifiers);")
+    @Query("SELECT * FROM records WHERE _id IN (:identifiers);")
     fun load(identifiers: List<String>): List<Record>
 
     // NOTE: REPLACE Strategy would make `loadAll` inconsistence
@@ -28,6 +27,5 @@ interface Queries {
     fun delete(identifier: String): Int
 
     @Query("DELETE FROM records")
-    @VisibleForTesting
     fun deleteAll()
 }

@@ -139,3 +139,15 @@ struct SelectAllStatement: Statement {
         return true
     }
 }
+
+
+struct DeleteAllStatement: Statement {
+    
+    let sql: String = """
+        DELETE FROM records;
+        """
+    
+    func bindTo(statement: OpaquePointer?) -> Bool {
+        return true
+    }
+}

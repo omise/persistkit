@@ -3,12 +3,12 @@ package co.omise.persistkit
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import androidx.annotation.VisibleForTesting
+import java.security.Key
 import java.security.KeyStore
 import java.security.UnrecoverableKeyException
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.spec.GCMParameterSpec
-import java.security.Key
 
 private const val ANDROID_KEY_STORE = "AndroidKeyStore"
 private const val TRANSFORMATION_SYMMETRIC = "AES/GCM/NoPadding"
@@ -45,11 +45,12 @@ open class Crypter(private val aliasKeyName: String) {
             return
         }
         val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
-        val keySpec = KeyGenParameterSpec.Builder(aliasKeyName, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
-            .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-            .setRandomizedEncryptionRequired(false)
-            .build()
+        val keySpec =
+            KeyGenParameterSpec.Builder(aliasKeyName, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+                .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                .setRandomizedEncryptionRequired(false)
+                .build()
         keyGenerator.init(keySpec)
         keyGenerator.generateKey()
         forceCreateKeyStore = false
@@ -65,7 +66,7 @@ open class Crypter(private val aliasKeyName: String) {
         return cipher.doFinal(plainData)
     }
 
-    open fun decrypt(encryptedBytes: ByteArray): ByteArray{
+    open fun decrypt(encryptedBytes: ByteArray): ByteArray {
         cipher.init(Cipher.DECRYPT_MODE, key, parameterSpec)
         val decryptedBytes = cipher.doFinal(encryptedBytes)
         return decryptedBytes
