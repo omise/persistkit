@@ -21,8 +21,6 @@ private var forceCreateKeyStore: Boolean = false
 open class Crypter(private val aliasKeyName: String) {
     lateinit var keyStore: KeyStore
 
-    private val cipher: Cipher by lazy { Cipher.getInstance(TRANSFORMATION_SYMMETRIC) }
-
     val key: Key by lazy {
         try {
             keyStore.getKey(aliasKeyName, null)
@@ -62,13 +60,14 @@ open class Crypter(private val aliasKeyName: String) {
     }
 
     open fun encrypt(plainData: ByteArray): ByteArray {
+        val cipher: Cipher by lazy { Cipher.getInstance(TRANSFORMATION_SYMMETRIC) }
         cipher.init(Cipher.ENCRYPT_MODE, key, parameterSpec)
         return cipher.doFinal(plainData)
     }
 
     open fun decrypt(encryptedBytes: ByteArray): ByteArray {
+        val cipher: Cipher by lazy { Cipher.getInstance(TRANSFORMATION_SYMMETRIC) }
         cipher.init(Cipher.DECRYPT_MODE, key, parameterSpec)
-        val decryptedBytes = cipher.doFinal(encryptedBytes)
-        return decryptedBytes
+        return cipher.doFinal(encryptedBytes)
     }
 }
