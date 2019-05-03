@@ -60,14 +60,18 @@ open class Crypter(private val aliasKeyName: String) {
     }
 
     open fun encrypt(plainData: ByteArray): ByteArray {
-        val cipher: Cipher by lazy { Cipher.getInstance(TRANSFORMATION_SYMMETRIC) }
-        cipher.init(Cipher.ENCRYPT_MODE, key, parameterSpec)
-        return cipher.doFinal(plainData)
+        synchronized(Crypter::class.java) {
+            val cipher: Cipher by lazy { Cipher.getInstance(TRANSFORMATION_SYMMETRIC) }
+            cipher.init(Cipher.ENCRYPT_MODE, key, parameterSpec)
+            return cipher.doFinal(plainData)
+        }
     }
 
     open fun decrypt(encryptedBytes: ByteArray): ByteArray {
-        val cipher: Cipher by lazy { Cipher.getInstance(TRANSFORMATION_SYMMETRIC) }
-        cipher.init(Cipher.DECRYPT_MODE, key, parameterSpec)
-        return cipher.doFinal(encryptedBytes)
+        synchronized(Crypter::class.java) {
+            val cipher: Cipher by lazy { Cipher.getInstance(TRANSFORMATION_SYMMETRIC) }
+            cipher.init(Cipher.DECRYPT_MODE, key, parameterSpec)
+            return cipher.doFinal(encryptedBytes)
+        }
     }
 }
