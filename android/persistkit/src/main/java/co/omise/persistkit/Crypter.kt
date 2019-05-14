@@ -2,19 +2,18 @@ package co.omise.persistkit
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
+import android.util.Base64
 import androidx.annotation.VisibleForTesting
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.security.Key
 import java.security.KeyStore
 import java.security.UnrecoverableKeyException
 import javax.crypto.Cipher
+import javax.crypto.CipherInputStream
+import javax.crypto.CipherOutputStream
 import javax.crypto.KeyGenerator
 import javax.crypto.spec.GCMParameterSpec
-
-private const val ANDROID_KEY_STORE = "AndroidKeyStore"
-private const val TRANSFORMATION_SYMMETRIC = "AES/GCM/NoPadding"
-
-// IV (Initialization Vector) has fix size 12 bytes for GCM modes
-private const val IV = "co.omise.ivx"
 
 private var forceCreateKeyStore: Boolean = false
 
@@ -29,8 +28,6 @@ open class Crypter(private val aliasKeyName: String) {
             throw e
         }
     }
-
-    private val parameterSpec: GCMParameterSpec by lazy { GCMParameterSpec(128, IV.toByteArray()) }
 
     init {
         createAndroidKeyStore()
@@ -60,14 +57,57 @@ open class Crypter(private val aliasKeyName: String) {
     }
 
     open fun encrypt(plainData: ByteArray): ByteArray {
-        val cipher: Cipher by lazy { Cipher.getInstance(TRANSFORMATION_SYMMETRIC) }
-        cipher.init(Cipher.ENCRYPT_MODE, key, parameterSpec)
-        return cipher.doFinal(plainData)
+        val cipher = Cipher.getInstance(TRANSFORMATION_SYMMETRIC)
+        cipher.init(Cipher.ENCRYPT_MODE, key)
+
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        val byteArrayInputStream = ByteArrayInputStream(plainData)
+        val cipherInputStream = CipherOutputStream(byteArrayOutputStream, cipher)
+        val buffer = ByteArray(BUFFER_SIZE)
+        var read = byteArrayInputStream.read(buffer)
+        while (read != -1) {
+            cipherInputStream.write(buffer, 0, read)
+            read = byteArrayInputStream.read(buffer)
+        }
+        byteArrayInputStream.close()
+        byteArrayOutputStream.flush()
+        cipherInputStream.close()
+
+        val iv = Base64.encodeToString(cipher.iv, Base64.DEFAULT)
+        val encryptedData = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT)
+        val encryptedDataWithIV = iv + IV_SEPARATOR + encryptedData
+        return encryptedDataWithIV.toByteArray()
     }
 
     open fun decrypt(encryptedBytes: ByteArray): ByteArray {
-        val cipher: Cipher by lazy { Cipher.getInstance(TRANSFORMATION_SYMMETRIC) }
-        cipher.init(Cipher.DECRYPT_MODE, key, parameterSpec)
-        return cipher.doFinal(encryptedBytes)
+        val splited = String(encryptedBytes).split(IV_SEPARATOR.toRegex())
+
+        if (splited.size != 2) {
+            throw IllegalArgumentException("Passed data is incorrect. There was no IV specified with it.")
+        }
+
+        val iv = Base64.decode(splited[0], Base64.DEFAULT)
+        val data = Base64.decode(splited[1], Base64.DEFAULT)
+
+        val cipher = Cipher.getInstance(TRANSFORMATION_SYMMETRIC)
+        cipher.init(Cipher.DECRYPT_MODE, key, GCMParameterSpec(TAG_LENGTH, iv))
+        val inputStream = ByteArrayInputStream(data)
+        val cipherInputStream = CipherInputStream(inputStream, cipher)
+        val outputStream = ByteArrayOutputStream()
+        val buffer = ByteArray(BUFFER_SIZE)
+        var numberOfBytedRead = cipherInputStream.read(buffer)
+        while (numberOfBytedRead >= 0) {
+            outputStream.write(buffer, 0, numberOfBytedRead)
+            numberOfBytedRead = cipherInputStream.read(buffer)
+        }
+        return outputStream.toByteArray()
+    }
+
+    companion object {
+        private const val ANDROID_KEY_STORE = "AndroidKeyStore"
+        private const val TRANSFORMATION_SYMMETRIC = "AES/GCM/NoPadding"
+        private const val TAG_LENGTH = 128
+        private const val IV_SEPARATOR = "]"
+        private const val BUFFER_SIZE = 1024
     }
 }
