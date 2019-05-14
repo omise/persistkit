@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun reloadTodoItem(item: TodoItem) {
         background.execute {
-            val updatedItem: TodoItem = database.load(item.identifier)
+            val updatedItem: TodoItem = database.load(item.identifier) ?: return@execute
             handler.post {
                 adapter.updateItem(updatedItem)
             }
