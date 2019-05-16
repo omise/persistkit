@@ -2,8 +2,7 @@ import Foundation
 import SQLite3
 
 
-
-public final class SQLite3Driver: Driver {
+public class SQLite3Driver: Driver {
 
   static let transiantDestructor = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
   
@@ -36,7 +35,7 @@ public final class SQLite3Driver: Driver {
   }
   
   func query(_ stmt: Statement) throws -> [Record] {
-    let statement = try prepareSqliteStatement(stmt: stmt)
+    let statement = try prepareSQLiteStatement(stmt: stmt)
     defer {
       sqlite3_finalize(statement)
     }
@@ -45,7 +44,7 @@ public final class SQLite3Driver: Driver {
     while true {
       switch sqlite3_step(statement) {
       case SQLITE_DONE:
-        return stmt.processRecords(records)
+        return stmt.processRecords(records.map(decode(_:)))
       case SQLITE_ROW:
         records.append(extractRecord(statement))
       default: // not _ROW or _DONE means we have an issue
@@ -59,8 +58,8 @@ public final class SQLite3Driver: Driver {
     return try execute(stmt)
   }
   
-  func execute(_ stmt: Statement) throws -> Int {    
-    let statement = try prepareSqliteStatement(stmt: stmt)
+  func execute(_ stmt: Statement) throws -> Int {
+    let statement = try prepareSQLiteStatement(stmt: stmt)
     defer {
       sqlite3_finalize(statement)
     }
@@ -70,14 +69,14 @@ public final class SQLite3Driver: Driver {
       case SQLITE_DONE:
         return countEffectedRows(self.db)
       case SQLITE_ROW:
-        continue;
+        continue
       default: // not _ROW or _DONE means we have an issue
         throw formatError(statement, def: "Statement execution failure")
       }
     }
   }
   
-  private func prepareSqliteStatement(stmt: Statement) throws -> OpaquePointer? {
+  private func prepareSQLiteStatement(stmt: Statement) throws -> OpaquePointer? {
     var statement: OpaquePointer? = nil
     guard sqlite3_prepare_v2(self.db, stmt.sql, -1, &statement, nil) == SQLITE_OK else {
       throw formatError(self.db, def: "Statement preparation failure")
@@ -137,7 +136,7 @@ public final class SQLite3Driver: Driver {
     case .loadWithIDs(let ideitifiers):
       return SelectIdentifiersStatement(ideitifiers)
     case .save(let record):
-      return UpsertStatement(record)
+      return UpsertStatement(encode(record))
     case .delete(let identifier):
       return DeleteIdentifierStatement(identifier)
     case .clearDatabase:
@@ -154,4 +153,13 @@ public final class SQLite3Driver: Driver {
     
     try FileManager.default.removeItem(at: fileURL)
   }
+  
+  func encode(_ record: Record) -> Record {
+    return record
+  }
+  
+  func decode(_ record: Record) -> Record {
+    return record
+  }
 }
+

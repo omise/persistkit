@@ -1,5 +1,6 @@
 import Foundation
 
+
 public final class Database {
   let driver: Driver
   
@@ -7,7 +8,7 @@ public final class Database {
     self.driver = driver
   }
   
-  public func loadAll<T: Recordable>() throws -> [T] {
+  public func loadAll<T: Recordable>(_ type: T.Type) throws -> [T] {
     let records = try driver.query(.loadAll)
     let recordablesOpt = try? records.map { (record) -> T in try T.decode(from: record) }
     guard let recordables = recordablesOpt else {
@@ -16,7 +17,7 @@ public final class Database {
     return recordables
   }
   
-  public func load<T: Recordable>(_ identifier: String) throws -> T? {
+  public func load<T: Recordable>(_ type: T.Type, identifier: String) throws -> T? {
     let records = try driver.query(.load(identifier))
     guard let record = records.first else {
       return nil
@@ -27,7 +28,7 @@ public final class Database {
     return recordable
   }
   
-  public func load<T: Recordable>(identifiers: [String]) throws -> [T] {
+  public func load<T: Recordable>(_ type: T.Type, identifiers: [String]) throws -> [T] {
     let records = try driver.query(Command.loadWithIDs(identifiers))
     return try records.map({
       do {

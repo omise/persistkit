@@ -168,17 +168,14 @@
 		2253925821A2ED9A00091822 /* PersistKit */ = {
 			isa = PBXGroup;
 			children = (
-				44A60CE32223FA0200B7C283 /* Driver */,
-				44BD809921F7018C009E2970 /* DatabaseError.swift */,
 				2253925921A2ED9A00091822 /* PersistKit.h */,
 				2253925A21A2ED9A00091822 /* Info.plist */,
 				22F5CDAA21A2FF08006476F1 /* Database.swift */,
-				2253923A21A0580800091822 /* Driver.swift */,
+				44BD809921F7018C009E2970 /* DatabaseError.swift */,
 				2253924A21A05D9300091822 /* Identifiable.swift */,
 				2253923F21A05C2C00091822 /* Record.swift */,
 				2253924821A05D4A00091822 /* Recordable.swift */,
-				22F5CDAE21A3005B006476F1 /* Statement.swift */,
-				44BD809721F6EE46009E2970 /* Command.swift */,
+				44A60CE32223FA0200B7C283 /* Driver */,
 			);
 			path = PersistKit;
 			sourceTree = "<group>";
@@ -186,9 +183,20 @@
 		44A60CE32223FA0200B7C283 /* Driver */ = {
 			isa = PBXGroup;
 			children = (
-				44A60CE42223FAA300B7C283 /* SQLite3Driver.swift */,
+				44BD809721F6EE46009E2970 /* Command.swift */,
+				2253923A21A0580800091822 /* Driver.swift */,
+				8A2CD03D228AC66B00BCA82F /* SQLite */,
 			);
 			path = Driver;
+			sourceTree = "<group>";
+		};
+		8A2CD03D228AC66B00BCA82F /* SQLite */ = {
+			isa = PBXGroup;
+			children = (
+				44A60CE42223FAA300B7C283 /* SQLite3Driver.swift */,
+				22F5CDAE21A3005B006476F1 /* Statement.swift */,
+			);
+			path = SQLite;
 			sourceTree = "<group>";
 		};
 		8A4E61EF225C9ADE00C4174A /* PersistKitTests */ = {

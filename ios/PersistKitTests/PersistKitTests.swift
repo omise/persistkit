@@ -32,7 +32,7 @@ class PersistKitTests: XCTestCase {
   }
   
   func testLoadAllData() throws {
-    let loadedTodos: [Todo] = try database.loadAll()
+    let loadedTodos: [Todo] = try database.loadAll(Todo.self)
     XCTAssertEqual(loadedTodos.count, todos.count)
     
     loadedTodos.enumerated().forEach { (index, todo) in
@@ -44,7 +44,7 @@ class PersistKitTests: XCTestCase {
   
   func testLoadSingleData() throws {
     let todo = todos[0]
-    guard let loadedTodo: Todo = try database.load(todo.identifier) else {
+    guard let loadedTodo = try database.load(Todo.self, identifier: todo.identifier) else {
       XCTFail("Cannot load the saved data")
       return
     }
@@ -55,12 +55,12 @@ class PersistKitTests: XCTestCase {
   }
   
   func testLoadNotExistedData() throws {
-    let loadedTodo: Todo? = try database.load("Undefined Todo")
+    let loadedTodo = try database.load(Todo.self, identifier: "Undefined Todo")
     XCTAssertNil(loadedTodo)
   }
   
   func testLoadMultipleData() throws {
-    let loadedTodos: [Todo] = try database.load(identifiers: ["Todo 5", "Todo 3", "Todo 1", ])
+    let loadedTodos = try database.load(Todo.self, identifiers: ["Todo 5", "Todo 3", "Todo 1", ])
     XCTAssertEqual(loadedTodos.count, 3)
     
     zip([5, 3, 1], loadedTodos).forEach({
@@ -92,3 +92,4 @@ struct Todo : Recordable {
     return title
   }
 }
+
