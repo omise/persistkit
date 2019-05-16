@@ -1,15 +1,21 @@
 import Foundation
 import SQLite3
+import Dispatch
 
 
 public class SQLite3Driver: Driver {
+  
+  private static let queueKey = DispatchSpecificKey<SQLite3Driver>()
 
   static let transiantDestructor = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
   
   let fileURL: URL
   let db: OpaquePointer
+  let queue: DispatchQueue
   
   public init?(databaseFileURL: URL) {
+    queue = DispatchQueue(label: "persistkit.sqlite3-driver.operating-queue")
+    
     var dbout: OpaquePointer? = nil
     guard databaseFileURL.isFileURL &&
       sqlite3_open(databaseFileURL.absoluteString, &dbout) == SQLITE_OK else { return nil }
@@ -18,6 +24,7 @@ public class SQLite3Driver: Driver {
     self.fileURL = databaseFileURL
     self.db = dbptr
     
+    queue.setSpecific(key: SQLite3Driver.queueKey, value: self)
     ensureInitialized()
   }
   
@@ -30,8 +37,16 @@ public class SQLite3Driver: Driver {
   }
   
   public func query(_ command: Command) throws -> [Record] {
-    let stmt = try newStatementFrom(command: command)
-    return try query(stmt)
+    let workItem: () throws -> [Record] = {
+      let stmt = try self.newStatementFrom(command: command)
+      return try self.query(stmt)
+    }
+    
+    if DispatchQueue.getSpecific(key: SQLite3Driver.queueKey) === self {
+      return try workItem()
+    } else {
+      return try queue.sync(execute: workItem)
+    }
   }
   
   func query(_ stmt: Statement) throws -> [Record] {
@@ -54,8 +69,16 @@ public class SQLite3Driver: Driver {
   }
   
   public func execute(_ command: Command) throws -> Int {
-    let stmt = try newStatementFrom(command: command)
-    return try execute(stmt)
+    let workItem: () throws -> Int = {
+      let stmt = try self.newStatementFrom(command: command)
+      return try self.execute(stmt)
+    }
+    
+    if DispatchQueue.getSpecific(key: SQLite3Driver.queueKey) === self {
+      return try workItem()
+    } else {
+      return try queue.sync(execute: workItem)
+    }
   }
   
   func execute(_ stmt: Statement) throws -> Int {
@@ -145,13 +168,20 @@ public class SQLite3Driver: Driver {
   }
   
   public func deleteDatabase() throws {
-    if #available(iOS 8.2, *) {
-      sqlite3_close_v2(self.db)
-    } else {
-      sqlite3_close(self.db)
+    let workItem = {
+      if #available(iOS 8.2, *) {
+        sqlite3_close_v2(self.db)
+      } else {
+        sqlite3_close(self.db)
+      }
+      try FileManager.default.removeItem(at: self.fileURL)
     }
     
-    try FileManager.default.removeItem(at: fileURL)
+    if DispatchQueue.getSpecific(key: SQLite3Driver.queueKey) === self {
+      try workItem()
+    } else {
+      try queue.sync(execute: workItem)
+    }
   }
   
   func encode(_ record: Record) -> Record {
