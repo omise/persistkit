@@ -7,12 +7,12 @@ class ListViewModel {
   private(set) var todoItems: [TodoItem] = []
   
   init() {
-    todoItems = try! db.loadAll()
+    todoItems = try! db.loadAll(TodoItem.self)
   }
   
   func add(item: TodoItem) {
     try! db.save(item)
-    todoItems = try! db.loadAll()
+    todoItems = try! db.loadAll(TodoItem.self)
   }
   
   func toggle(item: TodoItem) -> TodoItem {
@@ -43,7 +43,7 @@ class ListViewModel {
       fatalError("failed to find item in existing todoItems")
     }
     
-    guard let reloadedItem: TodoItem = try! db.load(item.identifier) else {
+    guard let reloadedItem: TodoItem = try! db.load(TodoItem.self, identifier: item.identifier) else {
       fatalError("failed to find item \"\(item.identifier)\" in database")
     }
     
@@ -56,9 +56,8 @@ class ListViewModel {
       fatalError("could not access the filesystem")
     }
     
-    let dbPath = URL(fileURLWithPath: dir).appendingPathComponent("mydb.sqlite3").absoluteString
-    
-    guard let driver = SQLite3Driver(filename: dbPath) else {
+    let dbPath = URL(fileURLWithPath: dir).appendingPathComponent("mydb.sqlite3")
+    guard let driver = SQLite3Driver(databaseFileURL: dbPath) else {
       fatalError("failed to initialize SQLite3Driver for Database")
     }
     

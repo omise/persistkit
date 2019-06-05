@@ -68,7 +68,8 @@ struct UpsertStatement: Statement {
 struct DeleteIdentifierStatement: Statement {
     
     let sql: String = """
-        DELETE FROM records WHERE identifier = ?;
+        DELETE FROM records
+        WHERE identifier = ?;
         """
     
     let identifier: String
@@ -86,7 +87,10 @@ struct DeleteIdentifierStatement: Statement {
 struct SelectIdentifierStatement: Statement {
     
     let sql: String = """
-        SELECT * FROM records WHERE identifier = ?;
+        SELECT *
+        FROM records
+        WHERE identifier = ?
+        LIMIT 1;
         """
     
     let identifier: String
@@ -107,7 +111,12 @@ struct SelectIdentifiersStatement: Statement {
     let identifiers: [String]
     init (_ identifiers: [String]) {
         let inQuery = Array(repeating: "?", count: identifiers.count)
-        self.sql = "SELECT * FROM records WHERE identifier IN (\(inQuery.joined(separator: ",")));"
+        self.sql = """
+            SELECT *
+            FROM records
+            WHERE identifier IN (\(inQuery.joined(separator: ",")))
+            ORDER BY identifier ASC;
+            """
         self.identifiers = identifiers
     }
     
@@ -132,7 +141,9 @@ struct SelectIdentifiersStatement: Statement {
 struct SelectAllStatement: Statement {
     
     let sql: String = """
-        SELECT * FROM records;
+        SELECT *
+        FROM records
+        ORDER BY identifier ASC;
         """
     
     func bindTo(statement: OpaquePointer?) -> Bool {
