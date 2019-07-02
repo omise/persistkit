@@ -87,6 +87,7 @@
 		44A60CE42223FAA300B7C283 /* SQLite3Driver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLite3Driver.swift; sourceTree = "<group>"; };
 		44BD809721F6EE46009E2970 /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
 		44BD809921F7018C009E2970 /* DatabaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
+		8A4666B922CB1ECF005AB600 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
 		8A4E61EE225C9ADE00C4174A /* PersistKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PersistKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A4E61F0225C9ADE00C4174A /* PersistKitTests.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = PersistKitTests.swift; sourceTree = "<group>"; tabWidth = 2; };
 		8A4E61F2225C9ADE00C4174A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -123,6 +124,7 @@
 		2253921C21A056DA00091822 = {
 			isa = PBXGroup;
 			children = (
+				8A4666B922CB1ECF005AB600 /* Package.swift */,
 				2253925821A2ED9A00091822 /* PersistKit */,
 				2253922721A056DA00091822 /* TestApp */,
 				8A4E61EF225C9ADE00C4174A /* PersistKitTests */,
