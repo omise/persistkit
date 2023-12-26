@@ -13,11 +13,11 @@ interface that is easy to guarantee consistent functionality between iOS and And
 
 **Goals:**
 
-* Make porting code from iOS to Android and back dead simple.
+* Make porting code from iOS to Android and back simple.
 * Fast.
 * Must not require schema management.
 
 **Non-Goals:**
 
-* Database compatibility between Android and iOS. Each platform use the best and most
+* Database compatibility between Android and iOS. Each platform must use the best and most
   performant format available to them.
